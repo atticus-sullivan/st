@@ -1,3 +1,5 @@
+.PHONY: all clean dist install pkg clean_pkg
+
 # st - simple terminal
 # See LICENSE file for copyright and license details.
 .POSIX:
@@ -20,7 +22,7 @@ x.o: arg.h config.h st.h win.h
 
 $(OBJ): config.h config.mk
 
-st: $(OBJ)
+st: clean $(OBJ)
 	$(CC) -o $@ $(OBJ) $(STLDFLAGS)
 
 clean:
@@ -34,18 +36,12 @@ dist: clean
 	tar -cf - st-$(VERSION) | gzip > st-$(VERSION).tar.gz
 	rm -rf st-$(VERSION)
 
-install: st
-	mkdir -p $(DESTDIR)$(PREFIX)/bin
-	cp -f st $(DESTDIR)$(PREFIX)/bin
-	chmod 755 $(DESTDIR)$(PREFIX)/bin/st
-	mkdir -p $(DESTDIR)$(MANPREFIX)/man1
-	sed "s/VERSION/$(VERSION)/g" < st.1 > $(DESTDIR)$(MANPREFIX)/man1/st.1
-	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/st.1
-	tic -sx st.info
-	@echo Please see the README file regarding the terminfo entry of st.
+install: pkg
+	makepkg -i
 
-uninstall:
-	rm -f $(DESTDIR)$(PREFIX)/bin/st
-	rm -f $(DESTDIR)$(MANPREFIX)/man1/st.1
+pkg:
+	makepkg -c
 
-.PHONY: all clean dist install uninstall
+clean_pkg:
+	-$(RM) *.tar.gz
+	-paccache -r -c . -k 1

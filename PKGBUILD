@@ -1,0 +1,40 @@
+# Maintainer: Lukas Heindl <oss.heindl@protonmail.com>
+pkgname=st
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Customized version of st"
+arch=('x86_64')
+url="https://github.com/atticus-sullivan/st"
+license=('MIT')
+makedepends=('gcc' 'make')
+provides=('st')
+conflicts=('st')
+source=("${pkgname}-${pkgver}.tar.gz::${url}/archive/refs/tags/${pkgver}.tar.gz")
+sha256sums=('SKIP')
+
+build() {
+	cd "${pkgname}-$pkgver"
+
+	make
+}
+
+package() {
+	cd "${pkgname}-$pkgver"
+
+	# Install binaries
+	install -Dm755 st "${pkgdir}/usr/local/bin/st"
+
+	# Install man pages
+	install -Dm644 st.1 "${pkgdir}/usr/local/man/man1/st.1"
+
+	# Run tic to compile and install the terminfo entry
+	install -Dm644 st.info "${pkgdir}/usr/share/terminfo.src/st.info"
+}
+
+post_install() {
+	# Make sure we're installing the terminfo entry
+	if [ -f "${pkgdir}/usr/share/terminfo.src/st.info" ]; then
+		msg "Installing terminfo entry for st..."
+		tic -sx "${pkgdir}/usr/share/terminfo.src/st.info"
+	fi
+}
