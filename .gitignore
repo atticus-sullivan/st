@@ -1,0 +1,7 @@
+st
+st.dark
+st.light
+*.pkg.tar.zst
+*.tar.gz
+/pkg-*/*
+!/pkg-*/PKGBUILD

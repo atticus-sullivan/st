@@ -1,5 +1,3 @@
-.PHONY: all clean dist install pkg clean_pkg pkg-dev pkg-release install-dev install-release
-
 # st - simple terminal
 # See LICENSE file for copyright and license details.
 .POSIX:
@@ -9,7 +7,9 @@ include config.mk
 SRC = st.c x.c
 OBJ = $(SRC:.c=.o)
 
-all: st
+all: st.light
+
+STCFLAGS += "-DLIGHT_THEME"
 
 config.h:
 	cp config.def.h config.h
@@ -22,7 +22,7 @@ x.o: arg.h config.h st.h win.h
 
 $(OBJ): config.h config.mk
 
-st: clean $(OBJ)
+st.light: clean $(OBJ)
 	$(CC) -o $@ $(OBJ) $(STLDFLAGS)
 
 clean:
@@ -36,23 +36,13 @@ dist: clean
 	tar -cf - st-$(VERSION) | gzip > st-$(VERSION).tar.gz
 	rm -rf st-$(VERSION)
 
-install: install-dev
+install: st.light
+	mkdir -p $(DESTDIR)$(PREFIX)/bin
+	cp -f st.light $(DESTDIR)$(PREFIX)/bin/st.light
+	chmod 755 $(DESTDIR)$(PREFIX)/bin/st.light
 
-install-dev: pkg-dev
-	f="$$(find . -iname "st-dev-[0-9.]*-x86_64.pkg.tar.zst" | grep -v "debug" | head -n 1)" && sudo pacman -U "$$f"
+uninstall:
+	rm -f $(DESTDIR)$(PREFIX)/bin/st
+	rm -f $(DESTDIR)$(MANPREFIX)/man1/st.1
 
-install-release: pkg-release
-	f="$$(find . -iname "st-[a-f0-9.]*-x86_64.pkg.tar.zst" | grep -v "debug" | head -n 1)" && sudo pacman -U "$$f"
-
-pkg: pkg-dev
-
-pkg-release:
-	makepkg -D pkg-release -c
-	mv pkg-release/*.tar.zst .
-
-pkg-dev:
-	makepkg -D pkg-dev -c
-	mv pkg-dev/*.tar.zst .
-
-clean_pkg:
-	-$(RM) *.tar.gz *.tar.zst
+.PHONY: all clean dist install uninstall

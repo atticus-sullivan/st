@@ -1,25 +1,29 @@
 # Maintainer: Lukas Heindl <oss.heindl@protonmail.com>
-pkgname=st
+pkgname=st-dev
 pkgver=1.0.0
 pkgrel=1
-pkgdesc="Customized version of st"
+pkgdesc="Customized version of st build from git dev"
 arch=('x86_64')
 url="https://github.com/atticus-sullivan/st"
 license=('MIT')
 makedepends=('gcc' 'make')
 provides=('st')
 conflicts=('st')
-source=("${pkgname}-${pkgver}.tar.gz::${url}/archive/refs/tags/${pkgver}.tar.gz")
+source=("${pkgname}::git+${url}.git#branch=dev")
 sha256sums=('SKIP')
 
-build() {
-	cd "${pkgname}-$pkgver"
+pkgver() {
+	cd "${pkgname}"
+	git rev-parse --short HEAD
+}
 
+build() {
+	cd "${pkgname}"
 	make
 }
 
 package() {
-	cd "${pkgname}-$pkgver"
+	cd "${pkgname}"
 
 	# Install binaries
 	install -Dm755 st "${pkgdir}/usr/local/bin/st"
