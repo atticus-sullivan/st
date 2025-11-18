@@ -39,16 +39,17 @@ dist: clean
 install: install-dev
 
 install-dev: pkg-dev
-	f="$$(find . -iname "st-dev-[0-9.]*-x86_64.pkg.tar.zst" | grep -v "debug" | head -n 1)" && sudo pacman -U "$$f"
+	f="$$(find . -iname "st-dev-[a-f0-9.]*-x86_64.pkg.tar.zst" | grep -v "debug" | sort | tail -n1)" && sudo pacman -U "$$f"
 
 install-release: pkg-release
-	f="$$(find . -iname "st-[a-f0-9.]*-x86_64.pkg.tar.zst" | grep -v "debug" | head -n 1)" && sudo pacman -U "$$f"
+	f="$$(find . -iname "st-[0-9.]*-x86_64.pkg.tar.zst" | grep -v "debug" | sort | tail -n1)" && sudo pacman -U "$$f"
 
 pkg: pkg-dev
 
 pkg-release:
 	makepkg -D pkg-release -c
 	mv pkg-release/*.tar.zst .
+	curl -X PUT https://git.atticus-sullivan.de/api/packages/wm-tools/arch/extras/ --user lukas:$$(secret-tool lookup name "git.atticus-sullivan.de pkg-upload") --header "Content-Type: application/octet-stream" --data-binary "@$$(readlink -f $$(find . -iname 'st-[0-9.]*-x86_64.pkg.tar.zst' | grep -v 'debug' | sort | tail -n1))"
 
 pkg-dev:
 	makepkg -D pkg-dev -c

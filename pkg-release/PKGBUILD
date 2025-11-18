@@ -4,12 +4,12 @@ pkgver=1.0.0
 pkgrel=1
 pkgdesc="Customized version of st"
 arch=('x86_64')
-url="https://github.com/atticus-sullivan/st"
+url="https://git.atticus-sullivan.de/wm-tools/st"
 license=('MIT')
 makedepends=('gcc' 'make')
 provides=('st')
 conflicts=('st' 'st-dev')
-source=("${pkgname}-${pkgver}.tar.gz::${url}/archive/refs/tags/${pkgver}.tar.gz")
+source=("${pkgname}-${pkgver}::git+ssh://git@git.atticus-sullivan.de:3022/wm-tools/st.git#tag=${pkgver}")
 sha256sums=('SKIP')
 
 build() {
