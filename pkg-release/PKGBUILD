@@ -1,6 +1,6 @@
 # Maintainer: Lukas Heindl <oss.heindl@protonmail.com>
-pkgname=st
-pkgver=1.1.0
+pkgname=atticus-st
+pkgver=2.0.0
 pkgrel=1
 pkgdesc="Customized version of st"
 arch=('x86_64')
@@ -8,7 +8,7 @@ url="https://git.atticus-sullivan.de/wm-tools/st"
 license=('MIT')
 makedepends=('gcc' 'make')
 provides=('st')
-conflicts=('st' 'st-dev')
+conflicts=('st' 'atticus-st-dev', 'atticus-st')
 source=("${pkgname}-${pkgver}::git+ssh://git@git.atticus-sullivan.de:3022/wm-tools/st.git#tag=${pkgver}")
 sha256sums=('SKIP')
 
