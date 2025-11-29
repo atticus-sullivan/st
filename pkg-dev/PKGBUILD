@@ -1,5 +1,5 @@
 # Maintainer: Lukas Heindl <oss.heindl@protonmail.com>
-pkgname=st-dev
+pkgname=atticus-st-dev
 pkgver=d442678
 pkgrel=1
 pkgdesc="Customized version of st build from git dev"
@@ -8,7 +8,7 @@ url="https://git.atticus-sullivan.de/wm-tools/st"
 license=('MIT')
 makedepends=('gcc' 'make')
 provides=('st')
-conflicts=('st')
+conflicts=('st' 'atticus-st')
 source=("${pkgname}::git+ssh://git@git.atticus-sullivan.de:3022/wm-tools/st.git#branch=dev")
 sha256sums=('SKIP')
 
