@@ -8,7 +8,7 @@ url="https://git.atticus-sullivan.de/wm-tools/st"
 license=('MIT')
 makedepends=('gcc' 'make')
 provides=('st')
-conflicts=('st' 'atticus-st-dev', 'atticus-st')
+conflicts=('st' 'atticus-st-dev' 'atticus-st')
 source=("${pkgname}-${pkgver}::git+ssh://git@git.atticus-sullivan.de:3022/wm-tools/st.git#tag=${pkgver}")
 sha256sums=('SKIP')
 
